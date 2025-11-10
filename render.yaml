@@ -17,7 +17,7 @@ services:
   - type: web
     name: web
     env: python
-    plan: free # 'starter' o superior para evitar que se duerma
+    plan: starter # 'starter' o superior para evitar que se duerma
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
@@ -47,7 +47,7 @@ services:
   - type: worker
     name: worker
     env: python
-    plan: free # Necesitarás un plan con RAM (ej. Pro 4GB)
+    plan: pro # Necesitarás un plan con RAM (ej. Pro 4GB)
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
