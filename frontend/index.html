@@ -1,34 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selección de Características</title>
     <style>
-        body { font-family: sans-serif; margin: 0; padding: 2rem; background-color: #1a1a1a; color: #e0e0e0; }
-        main { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        section { background-color: #2a2a2a; border-radius: 8px; padding: 1.5rem; }
-        h1, h2 { border-bottom: 2px solid #444; padding-bottom: 0.5rem; }
-        h1 { text-align: center; grid-column: 1 / -1; }
-        .form-field { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #bbb; }
-        small { display: block; font-size: 0.8rem; color: #999; margin-top: 0.3rem; }
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        section {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        h1,
+        h2 {
+            border-bottom: 2px solid #444;
+            padding-bottom: 0.5rem;
+        }
+
+        h1 {
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        .form-field {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #bbb;
+        }
+
+        small {
+            display: block;
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 0.3rem;
+        }
+
         /* --- CSS ACTUALIZADO --- Se quitó 'textarea' */
-        select, button, input { width: 100%; padding: 0.75rem; box-sizing: border-box; border-radius: 4px; border: 1px solid #555; background-color: #333; color: #e0e0e0; font-size: 1rem; }
-        button { background-color: #007aff; color: white; cursor: pointer; border: none; }
-        button:disabled { background-color: #555; cursor: not-allowed; }
-        #results-output { background-color: #111; border: 1px solid #444; border-radius: 4px; padding: 1rem; min-height: 400px; font-size: 0.95rem; line-height: 1.6; }
-        #results-output ul { list-style: none; padding: 0; margin: 0; }
-        #results-output li { padding: 0.5rem 0; border-bottom: 1px solid #333; }
-        #results-output li strong { color: #aaa; min-width: 100px; margin-right: 0.5rem; display: inline-block; }
-        .status-PENDING { color: #f0e68c; } .status-RUNNING { color: #87ceeb; }
-        .status-COMPLETE { color: #90ee90; } .status-FAILED { color: #f08080; }
-        .metric-item strong { color: #90ee90 !important; }
-        .metric-item span { color: #fff; font-family: monospace; }
-        .metric-item small { font-weight: normal; margin-top: 0.2rem; color: #999; }
-        .features-list { font-size: 0.8rem; color: #ccc; background-color: #222; padding: 0.5rem; border-radius: 4px; max-height: 150px; overflow-y: auto; }
+        select,
+        button,
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #007aff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        #results-output {
+            background-color: #111;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 1rem;
+            min-height: 400px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        #results-output ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #results-output li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        #results-output li strong {
+            color: #aaa;
+            min-width: 100px;
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        .status-PENDING {
+            color: #f0e68c;
+        }
+
+        .status-RUNNING {
+            color: #87ceeb;
+        }
+
+        .status-COMPLETE {
+            color: #90ee90;
+        }
+
+        .status-FAILED {
+            color: #f08080;
+        }
+
+        .metric-item strong {
+            color: #90ee90 !important;
+        }
+
+        .metric-item span {
+            color: #fff;
+            font-family: monospace;
+        }
+
+        .metric-item small {
+            font-weight: normal;
+            margin-top: 0.2rem;
+            color: #999;
+        }
+
+        .features-list {
+            font-size: 0.8rem;
+            color: #ccc;
+            background-color: #222;
+            padding: 0.5rem;
+            border-radius: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <h1>Dashboard de Selección de Características</h1>
@@ -40,7 +165,7 @@
                     <input type="number" id="top_n_features" min="1" step="1" value="10" required>
                     <small>¿Cuántas de las características más importantes debe seleccionar el modelo?</small>
                 </div>
-                
+
                 <div class="form-field">
                     <label for="n_estimators">Nº de Árboles (n_estimators):</label>
                     <input type="number" id="n_estimators" min="1" step="1" placeholder="Default: 50">
@@ -56,14 +181,16 @@
                     <input type="number" id="min_samples_leaf" min="1" step="1" placeholder="Default: 1">
                     <small>Parámetro del modelo base. Nº mínimo de muestras en una hoja final.</small>
                 </div>
-                
+
                 <button type="submit" id="submit-button">Iniciar Análisis</button>
             </form>
         </section>
 
         <section id="results-container">
             <h2 id="job-title">Resultados</h2>
-            <div id="results-output"><p style="color: #777;">Esperando un trabajo...</p></div>
+            <div id="results-output">
+                <p style="color: #777;">Esperando un trabajo...</p>
+            </div>
         </section>
     </main>
 
@@ -94,14 +221,14 @@
                 // --- JAVASCRIPT ACTUALIZADO ---
                 // 1. Quitar la lógica del JSON
                 const paramsObj = {};
-                
+
                 // 2. Definir los inputs de parámetros que queremos leer
                 const modelParamInputs = [
                     { id: 'n_estimators', key: 'n_estimators' },
                     { id: 'max_depth', key: 'max_depth' },
                     { id: 'min_samples_leaf', key: 'min_samples_leaf' }
                 ];
-                
+
                 // 3. Leer cada input y añadirlo al objeto si tiene valor
                 for (const param of modelParamInputs) {
                     const inputEl = document.getElementById(param.id);
@@ -151,7 +278,7 @@
                     try {
                         const response = await fetch(`/api/status/${jobId}/`);
                         const data = await response.json();
-                        
+
                         let html = `<ul>
                             <li><strong>Status:</strong> <span class="status-${data.status}">${data.status}</span></li>
                             <li><strong>Top N:</strong> ${data.top_n_features}</li>
@@ -168,11 +295,15 @@
                         if (data.status === 'COMPLETE') {
                             clearInterval(pollInterval);
                             html += `<h4 style="margin-top: 1rem;">Comparativa de Modelos</h4><ul>`;
-                            
+
                             for (const [key, value] of Object.entries(data.results)) {
+                                if (key === 'f1_difference_percentage') {
+                                    continue;
+                                }
+
                                 const name = RESULT_NAMES[key] || key;
                                 let formattedValue;
-                                
+
                                 if (key === 'top_features_list') {
                                     formattedValue = `<div class="features-list">${value.join('<br>')}</div>`;
                                 } else if (typeof value === 'number') {
@@ -187,7 +318,7 @@
                             submitButton.disabled = false;
                             submitButton.textContent = 'Iniciar Análisis';
                         }
-                        
+
                         resultsOutput.innerHTML = html;
 
                     } catch (err) {
@@ -201,4 +332,5 @@
         });
     </script>
 </body>
+
 </html>
