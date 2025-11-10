@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Características</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 2rem; background-color: #1a1a1a; color: #e0e0e0; }
+        main { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        section { background-color: #2a2a2a; border-radius: 8px; padding: 1.5rem; }
+        h1, h2 { border-bottom: 2px solid #444; padding-bottom: 0.5rem; }
+        h1 { text-align: center; grid-column: 1 / -1; }
+        .form-field { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #bbb; }
+        small { display: block; font-size: 0.8rem; color: #999; margin-top: 0.3rem; }
+        select, textarea, button, input { width: 100%; padding: 0.75rem; box-sizing: border-box; border-radius: 4px; border: 1px solid #555; background-color: #333; color: #e0e0e0; font-size: 1rem; }
+        button { background-color: #007aff; color: white; cursor: pointer; border: none; }
+        button:disabled { background-color: #555; cursor: not-allowed; }
+        #results-output { background-color: #111; border: 1px solid #444; border-radius: 4px; padding: 1rem; min-height: 400px; font-size: 0.95rem; line-height: 1.6; }
+        #results-output ul { list-style: none; padding: 0; margin: 0; }
+        #results-output li { padding: 0.5rem 0; border-bottom: 1px solid #333; }
+        #results-output li strong { color: #aaa; min-width: 100px; margin-right: 0.5rem; display: inline-block; }
+        .status-PENDING { color: #f0e68c; } .status-RUNNING { color: #87ceeb; }
+        .status-COMPLETE { color: #90ee90; } .status-FAILED { color: #f08080; }
+        .metric-item strong { color: #90ee90 !important; }
+        .metric-item span { color: #fff; font-family: monospace; }
+        .metric-item small { font-weight: normal; margin-top: 0.2rem; color: #999; }
+        .features-list { font-size: 0.8rem; color: #ccc; background-color: #222; padding: 0.5rem; border-radius: 4px; max-height: 150px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Dashboard de Selección de Características</h1>
+        <section id="form-container">
+            <h2>Iniciar Nuevo Trabajo</h2>
+            <form id="job-form">
+                <div class="form-field">
+                    <label for="top_n_features">Top N Características a Seleccionar:</label>
+                    <input type="number" id="top_n_features" min="1" step="1" value="10" required>
+                    <small>¿Cuántas de las características más importantes debe seleccionar el modelo?</small>
+                </div>
+                <div class="form-field">
+                    <label for="model_params">Hiperparámetros Base (JSON):</label>
+                    <textarea id="model_params" rows="4" placeholder='Ej: {"n_estimators": 100}'>{}</textarea>
+                    <small>Parámetros para el RandomForestClassifier base. (Default: 50 estimadores)</small>
+                </div>
+                <button type="submit" id="submit-button">Iniciar Análisis</button>
+            </form>
+        </section>
+
+        <section id="results-container">
+            <h2 id="job-title">Resultados</h2>
+            <div id="results-output"><p style="color: #777;">Esperando un trabajo...</p></div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('job-form');
+            const submitButton = document.getElementById('submit-button');
+            const resultsOutput = document.getElementById('results-output');
+            const jobTitle = document.getElementById('job-title');
+            let pollInterval;
+
+            // Nombres amigables para los resultados
+            const RESULT_NAMES = {
+                'full_model_f1_score': 'F1 Score (Modelo Completo)',
+                'reduced_model_f1_score': 'F1 Score (Modelo Reducido)',
+                'f1_difference_percentage': 'Diferencia F1 (en %)',
+                'total_features_evaluated': 'Total Características',
+                'features_selected_count': 'Características Seleccionadas',
+                'top_features_list': 'Lista de Características'
+            };
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (pollInterval) clearInterval(pollInterval);
+                submitButton.disabled = true;
+                submitButton.textContent = 'Procesando...';
+                jobTitle.textContent = "Resultados";
+                resultsOutput.innerHTML = '<p style="color: #777;">Enviando trabajo...</p>';
+
+                let paramsObj;
+                const paramsText = document.getElementById('model_params').value;
+                if (paramsText && paramsText.trim() !== "" && paramsText.trim() !== "{}") {
+                    try { paramsObj = JSON.parse(paramsText); } catch (err) {
+                        resultsOutput.innerHTML = `<p class="status-FAILED"><strong>Error:</strong> El JSON de Hiperparámetros no es válido.</p>`;
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Iniciar Análisis';
+                        return;
+                    }
+                } else {
+                    paramsObj = {};
+                }
+
+                const body = {
+                    top_n_features: document.getElementById('top_n_features').value,
+                    model_params: paramsObj
+                };
+
+                try {
+                    const response = await fetch('/api/start/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                    const data = await response.json();
+                    if (!response.ok) { throw new Error(data.error || 'Error desconocido.'); }
+                    pollJobStatus(data.job_id);
+                } catch (err) {
+                    resultsOutput.innerHTML = `<p class="status-FAILED"><strong>Error:</strong> ${err.message}</p>`;
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Iniciar Análisis';
+                }
+            });
+
+            function pollJobStatus(jobId) {
+                jobTitle.textContent = `Resultados (Job: ${jobId.substring(0, 8)}...)`;
+                if (pollInterval) clearInterval(pollInterval);
+
+                pollInterval = setInterval(async () => {
+                    try {
+                        const response = await fetch(`/api/status/${jobId}/`);
+                        const data = await response.json();
+                        
+                        // Generar HTML para los resultados
+                        let html = `<ul>
+                            <li><strong>Status:</strong> <span class="status-${data.status}">${data.status}</span></li>
+                            <li><strong>Top N:</strong> ${data.top_n_features}</li>
+                            <li><strong>Job ID:</strong> <small>${data.job_id}</small></li>
+                        </ul>`;
+
+                        if (data.status === 'FAILED') {
+                            clearInterval(pollInterval);
+                            html += `<p class="status-FAILED"><strong>Error:</strong> ${data.error_message || 'Error desconocido.'}</p>`;
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Iniciar Análisis';
+                        }
+
+                        if (data.status === 'COMPLETE') {
+                            clearInterval(pollInterval);
+                            html += `<h4 style="margin-top: 1rem;">Comparativa de Modelos</h4><ul>`;
+                            
+                            for (const [key, value] of Object.entries(data.results)) {
+                                const name = RESULT_NAMES[key] || key;
+                                let formattedValue;
+                                
+                                // Formatear valores
+                                if (key === 'top_features_list') {
+                                    formattedValue = `<div class="features-list">${value.join('<br>')}</div>`;
+                                } else if (typeof value === 'number') {
+                                    formattedValue = `<span ${key.includes('difference') ? 'style="color: #f0e68c;"' : ''}>${parseFloat(value).toFixed(4)}</span>`;
+                                } else {
+                                    formattedValue = `<span>${value}</span>`;
+                                }
+
+                                html += `<li class="metric-item"><strong>${name}:</strong> ${formattedValue}</li>`;
+                            }
+                            html += `</ul>`;
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Iniciar Análisis';
+                        }
+                        
+                        resultsOutput.innerHTML = html;
+
+                    } catch (err) {
+                        resultsOutput.innerHTML = `<p class="status-FAILED"><strong>Error de red:</strong> ${err.message}</p>`;
+                        clearInterval(pollInterval);
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Iniciar Análisis';
+                    }
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

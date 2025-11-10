@@ -1,0 +1,72 @@
+# render.yaml (para selection_project)
+
+databases:
+  - name: database
+    plan: free # Elige un plan (los planes de pago son más estables)
+
+services:
+  # 1. Caché Redis
+  - type: redis
+    name: redis
+    plan: free # Elige un plan
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: Permitir todas las IPs
+
+  # 2. Aplicación Web Django (Gunicorn)
+  - type: web
+    name: web
+    env: python
+    plan: free # 'starter' o superior para evitar que se duerma
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: gunicorn selection_project.wsgi # <-- Nombre del nuevo proyecto
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: database
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.10.13 # Revisa tu versión
+      - key: DJANGO_SETTINGS_MODULE
+        value: selection_project.settings # <-- Nombre del nuevo proyecto
+      - key: DEBUG
+        value: False
+
+  # 3. Worker de Celery
+  - type: worker
+    name: worker
+    env: python
+    plan: free # Necesitarás un plan con RAM (ej. Pro 4GB)
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: celery -A selection_project worker --loglevel=info # <-- Nombre del nuevo proyecto
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: database
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+      - key: SECRET_KEY
+        value: ${web.SECRET_KEY:-}
+      - key: PYTHON_VERSION
+        value: 3.10.13 # Revisa tu versión
+      - key: DJANGO_SETTINGS_MODULE
+        value: selection_project.settings # <-- Nombre del nuevo proyecto
+      - key: DEBUG
+        value: False
