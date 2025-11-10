@@ -13,7 +13,8 @@
         .form-field { margin-bottom: 1rem; }
         label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #bbb; }
         small { display: block; font-size: 0.8rem; color: #999; margin-top: 0.3rem; }
-        select, textarea, button, input { width: 100%; padding: 0.75rem; box-sizing: border-box; border-radius: 4px; border: 1px solid #555; background-color: #333; color: #e0e0e0; font-size: 1rem; }
+        /* --- CSS ACTUALIZADO --- Se quitó 'textarea' */
+        select, button, input { width: 100%; padding: 0.75rem; box-sizing: border-box; border-radius: 4px; border: 1px solid #555; background-color: #333; color: #e0e0e0; font-size: 1rem; }
         button { background-color: #007aff; color: white; cursor: pointer; border: none; }
         button:disabled { background-color: #555; cursor: not-allowed; }
         #results-output { background-color: #111; border: 1px solid #444; border-radius: 4px; padding: 1rem; min-height: 400px; font-size: 0.95rem; line-height: 1.6; }
@@ -39,11 +40,23 @@
                     <input type="number" id="top_n_features" min="1" step="1" value="10" required>
                     <small>¿Cuántas de las características más importantes debe seleccionar el modelo?</small>
                 </div>
+                
                 <div class="form-field">
-                    <label for="model_params">Hiperparámetros Base (JSON):</label>
-                    <textarea id="model_params" rows="4" placeholder='Ej: {"n_estimators": 100}'>{}</textarea>
-                    <small>Parámetros para el RandomForestClassifier base. (Default: 50 estimadores)</small>
+                    <label for="n_estimators">Nº de Árboles (n_estimators):</label>
+                    <input type="number" id="n_estimators" min="1" step="1" placeholder="Default: 50">
+                    <small>Parámetro del modelo base. Más árboles es más preciso, pero más lento.</small>
                 </div>
+                <div class="form-field">
+                    <label for="max_depth">Profundidad Max. (max_depth):</label>
+                    <input type="number" id="max_depth" min="1" step="1" placeholder="Default: None (ilimitado)">
+                    <small>Parámetro del modelo base. Límite de profundidad de cada árbol.</small>
+                </div>
+                <div class="form-field">
+                    <label for="min_samples_leaf">Hojas Mín. (min_samples_leaf):</label>
+                    <input type="number" id="min_samples_leaf" min="1" step="1" placeholder="Default: 1">
+                    <small>Parámetro del modelo base. Nº mínimo de muestras en una hoja final.</small>
+                </div>
+                
                 <button type="submit" id="submit-button">Iniciar Análisis</button>
             </form>
         </section>
@@ -62,7 +75,6 @@
             const jobTitle = document.getElementById('job-title');
             let pollInterval;
 
-            // Nombres amigables para los resultados
             const RESULT_NAMES = {
                 'full_model_f1_score': 'F1 Score (Modelo Completo)',
                 'reduced_model_f1_score': 'F1 Score (Modelo Reducido)',
@@ -80,22 +92,42 @@
                 jobTitle.textContent = "Resultados";
                 resultsOutput.innerHTML = '<p style="color: #777;">Enviando trabajo...</p>';
 
-                let paramsObj;
-                const paramsText = document.getElementById('model_params').value;
-                if (paramsText && paramsText.trim() !== "" && paramsText.trim() !== "{}") {
-                    try { paramsObj = JSON.parse(paramsText); } catch (err) {
-                        resultsOutput.innerHTML = `<p class="status-FAILED"><strong>Error:</strong> El JSON de Hiperparámetros no es válido.</p>`;
-                        submitButton.disabled = false;
-                        submitButton.textContent = 'Iniciar Análisis';
-                        return;
+                // --- JAVASCRIPT ACTUALIZADO ---
+                // 1. Quitar la lógica del JSON
+                const paramsObj = {};
+                
+                // 2. Definir los inputs de parámetros que queremos leer
+                const modelParamInputs = [
+                    { id: 'n_estimators', key: 'n_estimators' },
+                    { id: 'max_depth', key: 'max_depth' },
+                    { id: 'min_samples_leaf', key: 'min_samples_leaf' }
+                ];
+                
+                // 3. Leer cada input y añadirlo al objeto si tiene valor
+                for (const param of modelParamInputs) {
+                    const inputEl = document.getElementById(param.id);
+                    const valueStr = inputEl.value;
+
+                    // Solo procesar si el usuario escribió un valor
+                    if (valueStr) {
+                        const valueInt = parseInt(valueStr, 10);
+                        const minVal = parseInt(inputEl.min || "1", 10);
+
+                        if (isNaN(valueInt) || valueInt < minVal) {
+                            resultsOutput.innerHTML = `<p class="status-FAILED"><strong>Error:</strong> El valor para "${param.key}" no es válido. Debe ser un número entero >= ${minVal}.</p>`;
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Iniciar Análisis';
+                            return; // Detener envío
+                        }
+                        // Añadir el parámetro al objeto
+                        paramsObj[param.key] = valueInt;
                     }
-                } else {
-                    paramsObj = {};
                 }
+                // --- FIN DE LA ACTUALIZACIÓN ---
 
                 const body = {
                     top_n_features: document.getElementById('top_n_features').value,
-                    model_params: paramsObj
+                    model_params: paramsObj // Enviar el objeto construido
                 };
 
                 try {
@@ -110,6 +142,8 @@
                 }
             });
 
+            // La función pollJobStatus() es la misma que la versión anterior.
+            // Copia y pégala aquí.
             function pollJobStatus(jobId) {
                 jobTitle.textContent = `Resultados (Job: ${jobId.substring(0, 8)}...)`;
                 if (pollInterval) clearInterval(pollInterval);
@@ -119,7 +153,6 @@
                         const response = await fetch(`/api/status/${jobId}/`);
                         const data = await response.json();
                         
-                        // Generar HTML para los resultados
                         let html = `<ul>
                             <li><strong>Status:</strong> <span class="status-${data.status}">${data.status}</span></li>
                             <li><strong>Top N:</strong> ${data.top_n_features}</li>
@@ -141,7 +174,6 @@
                                 const name = RESULT_NAMES[key] || key;
                                 let formattedValue;
                                 
-                                // Formatear valores
                                 if (key === 'top_features_list') {
                                     formattedValue = `<div class="features-list">${value.join('<br>')}</div>`;
                                 } else if (typeof value === 'number') {
