@@ -1,13 +1,13 @@
 # render.yaml (para selection_project)
 
 databases:
-  - name: database
+  - name: database2
     plan: free # Elige un plan (los planes de pago son más estables)
 
 services:
   # 1. Caché Redis
   - type: redis
-    name: redis
+    name: redis2
     plan: free # Elige un plan
     ipAllowList:
       - source: 0.0.0.0/0
@@ -15,7 +15,7 @@ services:
 
   # 2. Aplicación Web Django (Gunicorn)
   - type: web
-    name: web
+    name: web2
     env: python
     plan: starter # 'starter' o superior para evitar que se duerma
     buildCommand: |
@@ -45,7 +45,7 @@ services:
 
   # 3. Worker de Celery
   - type: worker
-    name: worker
+    name: worker2
     env: python
     plan: pro # Necesitarás un plan con RAM (ej. Pro 4GB)
     buildCommand: |
