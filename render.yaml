@@ -2,7 +2,6 @@
 
 databases:
   - name: database2
-    plan: starter # Elige un plan (los planes de pago son más estables)
 
 services:
   # 1. Caché Redis
