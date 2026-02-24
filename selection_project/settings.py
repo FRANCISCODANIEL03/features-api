@@ -22,12 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'clave-local-insegura-para-desarrollo')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'clave-local')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
-    'features-api.pakooff.com',]
+
+ALLOWED_HOSTS = ['*']
 if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
     CSRF_TRUSTED_ORIGINS = [f'https://{os.environ.get("RENDER_EXTERNAL_HOSTNAME")}']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
