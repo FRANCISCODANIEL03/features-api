@@ -15,3 +15,4 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import MinMaxScaler
 from sklearn import metrics
 from sklearn.metrics import f1_score, silhouette_score, calinski_harabasz_score
+from sklearn.metrics.cluster import contingency_matrix
