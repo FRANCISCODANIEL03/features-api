@@ -7,3 +7,5 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
+
+from celery import shared_task
