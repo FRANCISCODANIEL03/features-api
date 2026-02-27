@@ -23,4 +23,4 @@ DATA_FILE_PATH = 'creditcard.csv'
 # --- Funciones Auxiliares para Graficar (K-Means) ---
 def plot_data(X, y):
     plt.plot(X[:, 0][y == 0], X[:, 1][y == 0], 'k.', markersize=2)
-    
+    plt.plot(X[:, 0][y == 1], X[:, 1][y == 1], 'r.', markersize=2)
