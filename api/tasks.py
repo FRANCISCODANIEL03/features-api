@@ -26,3 +26,5 @@ def plot_data(X, y):
     plt.plot(X[:, 0][y == 1], X[:, 1][y == 1], 'r.', markersize=2)
 
 def plot_centroids(centroids, weights=None, circle_color='w', cross_color='k'):
+    if weights is not None:
+        centroids = centroids[weights > weights.max() / 10]
