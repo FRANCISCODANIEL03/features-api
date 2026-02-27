@@ -17,3 +17,5 @@ from sklearn import metrics
 from sklearn.metrics import f1_score, silhouette_score, calinski_harabasz_score
 from sklearn.metrics.cluster import contingency_matrix
 from .models import FeatureSelectionJob
+
+DATA_FILE_PATH = 'creditcard.csv'
