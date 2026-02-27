@@ -32,3 +32,5 @@ def plot_centroids(centroids, weights=None, circle_color='w', cross_color='k'):
                 color=circle_color, zorder=10, alpha=0.9)
     plt.scatter(centroids[:, 0], centroids[:, 1], marker='x', s=30, linewidths=2, 
                 color=cross_color, zorder=11)
+
+def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=True):
