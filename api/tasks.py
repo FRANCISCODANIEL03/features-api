@@ -19,3 +19,6 @@ from sklearn.metrics.cluster import contingency_matrix
 from .models import FeatureSelectionJob
 
 DATA_FILE_PATH = 'creditcard.csv'
+
+# --- Funciones Auxiliares para Graficar (K-Means) ---
+def plot_data(X, y):
