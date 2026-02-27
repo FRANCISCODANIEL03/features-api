@@ -28,3 +28,5 @@ def plot_data(X, y):
 def plot_centroids(centroids, weights=None, circle_color='w', cross_color='k'):
     if weights is not None:
         centroids = centroids[weights > weights.max() / 10]
+    plt.scatter(centroids[:, 0], centroids[:, 1], marker='o', s=30, linewidths=8, 
+                color=circle_color, zorder=10, alpha=0.9)
