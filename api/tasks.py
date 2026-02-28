@@ -42,3 +42,5 @@ def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=Tr
     
     Z = clusterer.predict(np.c_[xx.ravel(), yy.ravel()])
     Z = Z.reshape(xx.shape)
+
+    plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")
