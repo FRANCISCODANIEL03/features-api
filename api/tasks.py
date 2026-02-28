@@ -50,3 +50,6 @@ def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=Tr
     
     if show_centroids:
         plot_centroids(clusterer.cluster_centers_)
+
+# --- Utilidades ---
+def load_data_raw():
