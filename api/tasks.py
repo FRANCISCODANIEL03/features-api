@@ -36,3 +36,7 @@ def plot_centroids(centroids, weights=None, circle_color='w', cross_color='k'):
 def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=True):
     mins = X.min(axis=0) - 0.1
     maxs = X.max(axis=0) + 0.1
+    
+    xx, yy = np.meshgrid(np.linspace(mins[0], maxs[0], resolution),
+                         np.linspace(mins[1], maxs[1], resolution))
+    
