@@ -44,3 +44,4 @@ def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=Tr
     Z = Z.reshape(xx.shape)
 
     plt.contourf(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), cmap="Pastel2")
+    plt.contour(Z, extent=(mins[0], maxs[0], mins[1], maxs[1]), colors='k', linewidths=1)
