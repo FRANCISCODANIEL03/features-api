@@ -41,3 +41,4 @@ def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=Tr
                          np.linspace(mins[1], maxs[1], resolution))
     
     Z = clusterer.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
