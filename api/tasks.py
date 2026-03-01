@@ -67,3 +67,4 @@ def plot_to_base64(plt_figure):
 
 def purity_score(y_true, y_pred):
     c_matrix = contingency_matrix(y_true, y_pred)
+    return np.sum(np.amax(c_matrix, axis=0)) / np.sum(c_matrix)
