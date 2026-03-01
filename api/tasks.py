@@ -62,3 +62,4 @@ def plot_to_base64(plt_figure):
     buf = io.BytesIO()
     plt_figure.savefig(buf, format='png', bbox_inches='tight')
     plt_figure.close()
+    buf.seek(0)
