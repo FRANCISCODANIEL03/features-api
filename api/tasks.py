@@ -59,3 +59,4 @@ def load_data_raw():
         raise FileNotFoundError(f"Falta {DATA_FILE_PATH}")
 
 def plot_to_base64(plt_figure):
+    buf = io.BytesIO()
