@@ -64,3 +64,5 @@ def plot_to_base64(plt_figure):
     plt_figure.close()
     buf.seek(0)
     return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode('utf-8')}"
+
+def purity_score(y_true, y_pred):
