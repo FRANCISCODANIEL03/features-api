@@ -57,3 +57,5 @@ def load_data_raw():
         return pd.read_csv(DATA_FILE_PATH)
     except FileNotFoundError:
         raise FileNotFoundError(f"Falta {DATA_FILE_PATH}")
+
+def plot_to_base64(plt_figure):
