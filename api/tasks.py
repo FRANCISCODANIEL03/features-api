@@ -53,3 +53,7 @@ def plot_decision_boundaries(clusterer, X, y, resolution=1000, show_centroids=Tr
 
 # --- Utilidades ---
 def load_data_raw():
+    try:
+        return pd.read_csv(DATA_FILE_PATH)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Falta {DATA_FILE_PATH}")
