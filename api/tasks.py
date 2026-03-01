@@ -66,3 +66,4 @@ def plot_to_base64(plt_figure):
     return f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode('utf-8')}"
 
 def purity_score(y_true, y_pred):
+    c_matrix = contingency_matrix(y_true, y_pred)
