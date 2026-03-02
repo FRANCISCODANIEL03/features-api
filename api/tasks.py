@@ -71,3 +71,4 @@ def purity_score(y_true, y_pred):
 
 # --- Lógica 1: Random Forest ---
 def run_rf_logic(df, user_params, top_n):
+    X = df.drop('Class', axis=1)
