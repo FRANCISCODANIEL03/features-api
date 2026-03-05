@@ -77,3 +77,5 @@ def run_rf_logic(df, user_params, top_n):
     X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp)
     
     defaults = {'n_estimators': 50, 'random_state': 42, 'n_jobs': -1}
+    params = {**defaults, **user_params}
+    
