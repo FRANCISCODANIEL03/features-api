@@ -79,3 +79,5 @@ def run_rf_logic(df, user_params, top_n):
     defaults = {'n_estimators': 50, 'random_state': 42, 'n_jobs': -1}
     params = {**defaults, **user_params}
     
+    clf = RandomForestClassifier(**params)
+    
