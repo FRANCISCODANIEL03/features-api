@@ -80,4 +80,4 @@ def run_rf_logic(df, user_params, top_n):
     params = {**defaults, **user_params}
     
     clf = RandomForestClassifier(**params)
-    
+    clf.fit(X_train, y_train)
