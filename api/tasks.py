@@ -81,3 +81,5 @@ def run_rf_logic(df, user_params, top_n):
     
     clf = RandomForestClassifier(**params)
     clf.fit(X_train, y_train)
+    f1_full = f1_score(y_val, clf.predict(X_val), average='weighted')
+    
