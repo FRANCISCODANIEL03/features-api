@@ -87,3 +87,4 @@ def run_rf_logic(df, user_params, top_n):
     feats = pd.Series(importances, index=X_train.columns).sort_values(ascending=False)
     top_feats = feats.head(top_n).to_dict()
     
+    top_cols = list(top_feats.keys())
