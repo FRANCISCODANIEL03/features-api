@@ -84,3 +84,4 @@ def run_rf_logic(df, user_params, top_n):
     f1_full = f1_score(y_val, clf.predict(X_val), average='weighted')
     
     importances = clf.feature_importances_
+    feats = pd.Series(importances, index=X_train.columns).sort_values(ascending=False)
