@@ -88,3 +88,4 @@ def run_rf_logic(df, user_params, top_n):
     top_feats = feats.head(top_n).to_dict()
     
     top_cols = list(top_feats.keys())
+    clf_red = RandomForestClassifier(**params)
