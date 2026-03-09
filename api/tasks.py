@@ -90,3 +90,5 @@ def run_rf_logic(df, user_params, top_n):
     top_cols = list(top_feats.keys())
     clf_red = RandomForestClassifier(**params)
     clf_red.fit(X_train[top_cols], y_train)
+    f1_red = f1_score(y_val, clf_red.predict(X_val[top_cols]), average='weighted')
+    
