@@ -92,3 +92,8 @@ def run_rf_logic(df, user_params, top_n):
     clf_red.fit(X_train[top_cols], y_train)
     f1_red = f1_score(y_val, clf_red.predict(X_val[top_cols]), average='weighted')
     
+    return {
+        "F1 Score (Full)": f1_full,
+        "F1 Score (Reduced)": f1_red,
+        "Feature Importances": top_feats
+    }
