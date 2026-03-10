@@ -97,3 +97,6 @@ def run_rf_logic(df, user_params, top_n):
         "F1 Score (Reduced)": f1_red,
         "Feature Importances": top_feats
     }
+
+# --- Lógica 2: K-Means (CORREGIDA) ---
+def run_kmeans_logic(df, user_params):
