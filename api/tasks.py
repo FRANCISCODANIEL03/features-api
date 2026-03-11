@@ -102,3 +102,5 @@ def run_rf_logic(df, user_params, top_n):
 def run_kmeans_logic(df, user_params):
     cols_drop = ['Class', 'Time', 'Amount']
     X_high = df.drop([c for c in cols_drop if c in df.columns], axis=1)
+    y = df['Class']
+    
