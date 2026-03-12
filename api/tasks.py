@@ -104,3 +104,5 @@ def run_kmeans_logic(df, user_params):
     X_high = df.drop([c for c in cols_drop if c in df.columns], axis=1)
     y = df['Class']
     
+    k = user_params.get('n_clusters', 5)
+    
