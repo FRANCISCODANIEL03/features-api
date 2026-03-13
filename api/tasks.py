@@ -108,3 +108,5 @@ def run_kmeans_logic(df, user_params):
     
     # --- CAMBIO 1: Leer Ejes Dinámicos ---
     fx = user_params.get('feature_x', 'V10')
+    fy = user_params.get('feature_y', 'V14')
+    
