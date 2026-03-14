@@ -118,3 +118,5 @@ def run_kmeans_logic(df, user_params):
         "Silhouette Score": metrics.silhouette_score(X_high, clusters_high, sample_size=10000),
         "Calinski-Harabasz": metrics.calinski_harabasz_score(X_high, clusters_high)
     }
+
+    counter = Counter(clusters_high.tolist())
