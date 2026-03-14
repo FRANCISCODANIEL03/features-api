@@ -113,3 +113,8 @@ def run_kmeans_logic(df, user_params):
     kmeans_high = KMeans(n_clusters=k, random_state=42)
     clusters_high = kmeans_high.fit_predict(X_high)
     
+    results = {
+        "Purity Score": purity_score(y, clusters_high),
+        "Silhouette Score": metrics.silhouette_score(X_high, clusters_high, sample_size=10000),
+        "Calinski-Harabasz": metrics.calinski_harabasz_score(X_high, clusters_high)
+    }
