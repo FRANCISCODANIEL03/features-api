@@ -111,3 +111,5 @@ def run_kmeans_logic(df, user_params):
     fy = user_params.get('feature_y', 'V14')
     
     kmeans_high = KMeans(n_clusters=k, random_state=42)
+    clusters_high = kmeans_high.fit_predict(X_high)
+    
