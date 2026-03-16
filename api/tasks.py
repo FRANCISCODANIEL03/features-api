@@ -145,3 +145,4 @@ def run_kmeans_logic(df, user_params):
     kmeans_plot = KMeans(n_clusters=k, random_state=42)
     kmeans_plot.fit(X_plot)
     
+    plt.figure(figsize=(12, 6))
