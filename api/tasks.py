@@ -124,3 +124,6 @@ def run_kmeans_logic(df, user_params):
     bad_counter = Counter(clusters_high[y == 1].tolist())
     
     cluster_report = {}
+    for key in sorted(counter.keys()):
+        # Creamos el string exacto que pediste
+        msg = f"{counter[key]} samples - {bad_counter[key]} are malicious samples"
