@@ -142,3 +142,4 @@ def run_kmeans_logic(df, user_params):
 
     y_plot = y.values
     
+    kmeans_plot = KMeans(n_clusters=k, random_state=42)
