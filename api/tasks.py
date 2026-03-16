@@ -130,3 +130,5 @@ def run_kmeans_logic(df, user_params):
         label_name = f"Label {key}"
         cluster_report[label_name] = msg
         
+    # Agregamos este reporte al resultado final
+    results["Análisis de Clusters"] = cluster_report
