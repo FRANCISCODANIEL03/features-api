@@ -132,3 +132,10 @@ def run_kmeans_logic(df, user_params):
         
     # Agregamos este reporte al resultado final
     results["Análisis de Clusters"] = cluster_report
+
+    # Gráfica Dinámica
+    try:
+        X_plot = df[[fx, fy]].values
+    except KeyError:
+        X_plot = df[['V10', 'V14']].values # Fallback
+        fx, fy = 'V10', 'V14'
