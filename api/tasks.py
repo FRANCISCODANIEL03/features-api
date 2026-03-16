@@ -128,3 +128,5 @@ def run_kmeans_logic(df, user_params):
         # Creamos el string exacto que pediste
         msg = f"{counter[key]} samples - {bad_counter[key]} are malicious samples"
         label_name = f"Label {key}"
+        cluster_report[label_name] = msg
+        
