@@ -123,3 +123,4 @@ def run_kmeans_logic(df, user_params):
     # Contamos cuántos de cada cluster son fraudulentos (y == 1)
     bad_counter = Counter(clusters_high[y == 1].tolist())
     
+    cluster_report = {}
