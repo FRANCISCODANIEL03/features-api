@@ -139,3 +139,6 @@ def run_kmeans_logic(df, user_params):
     except KeyError:
         X_plot = df[['V10', 'V14']].values # Fallback
         fx, fy = 'V10', 'V14'
+
+    y_plot = y.values
+    
