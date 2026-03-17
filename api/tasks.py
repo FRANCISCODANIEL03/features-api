@@ -153,3 +153,4 @@ def run_kmeans_logic(df, user_params):
     
     results["Plot: Clusters KMeans"] = plot_to_base64(plt)
     
+    return results
