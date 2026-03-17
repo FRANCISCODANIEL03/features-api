@@ -149,3 +149,5 @@ def run_kmeans_logic(df, user_params):
     plot_decision_boundaries(kmeans_plot, X_plot, y_plot)
     plt.xlabel(fx, fontsize=14)
     plt.ylabel(fy, fontsize=14)
+    plt.title(f"Clusters K-Means (k={k}) - {fx} vs {fy}")
+    
