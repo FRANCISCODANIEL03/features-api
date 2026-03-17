@@ -146,3 +146,4 @@ def run_kmeans_logic(df, user_params):
     kmeans_plot.fit(X_plot)
     
     plt.figure(figsize=(12, 6))
+    plot_decision_boundaries(kmeans_plot, X_plot, y_plot)
