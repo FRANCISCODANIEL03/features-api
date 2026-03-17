@@ -151,3 +151,5 @@ def run_kmeans_logic(df, user_params):
     plt.ylabel(fy, fontsize=14)
     plt.title(f"Clusters K-Means (k={k}) - {fx} vs {fy}")
     
+    results["Plot: Clusters KMeans"] = plot_to_base64(plt)
+    
