@@ -4,3 +4,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import FeatureSelectionJob
 from .tasks import run_analysis_job
+
+def frontend_view(request):
+    return render(request, "index.html")
