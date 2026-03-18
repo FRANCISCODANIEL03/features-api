@@ -11,3 +11,4 @@ def frontend_view(request):
 class StartJobView(APIView):
     def post(self, request, *args, **kwargs):
         job_type = request.data.get('job_type', 'RF')
+        model_params = request.data.get('model_params', {})
