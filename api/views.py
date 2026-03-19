@@ -35,3 +35,5 @@ class StartJobView(APIView):
             model_params=model_params,
             top_n_features=top_n
         )
+        run_analysis_job.delay(job.id)
+        
