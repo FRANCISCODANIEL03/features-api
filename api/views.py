@@ -49,3 +49,11 @@ class JobStatusView(APIView):
             job = FeatureSelectionJob.objects.get(id=job_id)
         except FeatureSelectionJob.DoesNotExist:
             return Response({'error': 'No encontrado'}, status=404)
+
+        return Response({
+            'job_id': job.id,
+            'status': job.status,
+            'job_type': job.job_type,
+            'results': job.results,
+            'error_message': job.error_message,
+        }, status=200)
