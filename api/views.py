@@ -20,3 +20,7 @@ class StartJobView(APIView):
         if 'feature_y' not in model_params:
             model_params['feature_y'] = 'V14' # Default
         # ---------------------
+
+        # Validaciones DBSCAN
+        if job_type == 'DB':
+            if 'eps' in model_params: model_params['eps'] = float(model_params['eps'])
