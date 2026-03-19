@@ -24,3 +24,4 @@ class StartJobView(APIView):
         # Validaciones DBSCAN
         if job_type == 'DB':
             if 'eps' in model_params: model_params['eps'] = float(model_params['eps'])
+            if 'min_samples' in model_params: model_params['min_samples'] = int(model_params['min_samples'])
