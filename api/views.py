@@ -27,3 +27,5 @@ class StartJobView(APIView):
             if 'min_samples' in model_params: model_params['min_samples'] = int(model_params['min_samples'])
 
         top_n = request.data.get('top_n_features', 10)
+        try: top_n = int(top_n)
+        except: top_n = 10
