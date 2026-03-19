@@ -43,3 +43,9 @@ class StartJobView(APIView):
             'job_type': job_type
         }, status=status.HTTP_202_ACCEPTED)
     
+class JobStatusView(APIView):
+    def get(self, request, job_id, *args, **kwargs):
+        try:
+            job = FeatureSelectionJob.objects.get(id=job_id)
+        except FeatureSelectionJob.DoesNotExist:
+            return Response({'error': 'No encontrado'}, status=404)
