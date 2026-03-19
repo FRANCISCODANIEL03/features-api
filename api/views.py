@@ -17,3 +17,6 @@ class StartJobView(APIView):
         # Aseguramos que existan en model_params si el frontend no los mandó bien
         if 'feature_x' not in model_params:
             model_params['feature_x'] = 'V10' # Default
+        if 'feature_y' not in model_params:
+            model_params['feature_y'] = 'V14' # Default
+        # ---------------------
