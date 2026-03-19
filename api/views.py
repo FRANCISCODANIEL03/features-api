@@ -29,3 +29,9 @@ class StartJobView(APIView):
         top_n = request.data.get('top_n_features', 10)
         try: top_n = int(top_n)
         except: top_n = 10
+
+        job = FeatureSelectionJob.objects.create(
+            job_type=job_type,
+            model_params=model_params,
+            top_n_features=top_n
+        )
