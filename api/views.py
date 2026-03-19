@@ -25,3 +25,5 @@ class StartJobView(APIView):
         if job_type == 'DB':
             if 'eps' in model_params: model_params['eps'] = float(model_params['eps'])
             if 'min_samples' in model_params: model_params['min_samples'] = int(model_params['min_samples'])
+
+        top_n = request.data.get('top_n_features', 10)
