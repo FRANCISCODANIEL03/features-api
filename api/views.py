@@ -37,3 +37,9 @@ class StartJobView(APIView):
         )
         run_analysis_job.delay(job.id)
         
+        return Response({
+            'message': 'Ok', 
+            'job_id': job.id, 
+            'job_type': job_type
+        }, status=status.HTTP_202_ACCEPTED)
+    
